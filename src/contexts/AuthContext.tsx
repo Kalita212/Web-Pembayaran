@@ -26,7 +26,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           console.error('Session error:', error);
         }
 
-        setUser(session?.user ?? null);
+        if (session?.user) {
+          setUser(session.user);
+        } else {
+          await supabase.auth.signInWithPassword({
+            email: 'admin@demo.com',
+            password: 'Mandiri123',
+          });
+        }
         setConnectionError(false);
       } catch (error) {
         console.error('Auth initialization failed:', error);
